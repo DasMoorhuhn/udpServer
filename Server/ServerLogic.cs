@@ -68,7 +68,7 @@ namespace udpServer.Server
 
 			if (deviceInConnectedDevices)
 			{
-				this.oldDevice();
+				this.oldDevice(_ip, connectedDevices);
 			}
 			else
 			{
@@ -81,9 +81,17 @@ namespace udpServer.Server
 			Console.WriteLine("New");
 		}
 
-		private void oldDevice()
+		private void oldDevice(string _ip, string[] _connectedDevices)
 		{
 			Console.WriteLine("Old");
+
+			foreach (string i in _connectedDevices)
+			{
+				if (i != _ip)
+				{
+
+				}
+			}
 		}
 
 		private void getCommand(string[] command)

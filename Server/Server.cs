@@ -43,6 +43,16 @@ namespace udpServer.Server
 			return this.connectedDevices;
 		}
 
+		public void addConnectedDevices(string newID)
+		{
+			this.connectedDevices.Append(newID);
+		}
+
+		public void delConnectedDevices(string id)
+		{
+
+		}
+
 		public void sendTo(string _ip, int _port, string _msg)
 		{
 			IPAddress broadcast = IPAddress.Parse(_ip);

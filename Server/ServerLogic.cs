@@ -23,7 +23,6 @@ namespace udpServer.Server
 			string ipAddr = ipAndPort[0];
 			int port = Convert.ToInt32(ipAndPort[1]);
 
-
 			if (command.Length == 3)
 			{
 				this.getAlive(ipAddr, port, command, _server);
@@ -50,7 +49,7 @@ namespace udpServer.Server
 			string alive = _command[2];
 			bool deviceInConnectedDevices = false;
 
-			if (cmd == "CMD")
+			if (cmd == "CMD" && alive == "LIFE")
 			{
 				foreach (string valueInValidIDs in validIDs)
 				{
@@ -64,6 +63,33 @@ namespace udpServer.Server
 							}
 						}
 					}
+				}
+			}
+
+			if (deviceInConnectedDevices)
+			{
+				this.oldDevice(_ip, connectedDevices);
+			}
+			else
+			{
+				this.newDevice();
+			}
+		}
+
+		private void newDevice()
+		{
+			Console.WriteLine("New");
+		}
+
+		private void oldDevice(string _ip, string[] _connectedDevices)
+		{
+			Console.WriteLine("Old");
+
+			foreach (string i in _connectedDevices)
+			{
+				if (i != _ip)
+				{
+
 				}
 			}
 		}

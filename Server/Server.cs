@@ -15,7 +15,7 @@ namespace udpServer.Server
 		private UdpClient listen;
 		private IPEndPoint epIn;
 		private string[] validIDs = { "TEST", "A001" };
-		private string[] connectedDevices;
+		private string[] connectedDevices = {  };
 
 		public Server(int _serverPort)
 		{

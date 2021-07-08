@@ -14,6 +14,8 @@ namespace udpServer.Server
 		private Socket sockUdp;
 		private UdpClient listen;
 		private IPEndPoint epIn;
+		private string[] validIDs = { "TEST", "A001" };
+		private string[] connectedDevices;
 
 		public Server(int _serverPort)
 		{
@@ -31,6 +33,16 @@ namespace udpServer.Server
 			}
 		}
 
+		public string[] getValidIDs()
+		{
+			return this.validIDs;
+		}
+
+		public string[] getConnectedDevices()
+		{
+			return this.connectedDevices;
+		}
+
 		public void sendTo(string _ip, int _port, string _msg)
 		{
 			IPAddress broadcast = IPAddress.Parse(_ip);
@@ -46,6 +58,9 @@ namespace udpServer.Server
 			msg.Append(Encoding.ASCII.GetString(recv, 0, recv.Length));
 			msg.Append("|");
 			msg.Append(this.epIn);
+			string[] value = this.epIn.ToString().Split(":");
+			int port = Convert.ToInt32(value[1]);
+			this.sendTo(value[0], port, "OK");
 			return msg.ToString();
 		}
 	}

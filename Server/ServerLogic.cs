@@ -53,14 +53,22 @@ namespace udpServer.Server
 			{
 				foreach (string valueInValidIDs in validIDs)
 				{
-					if (valueInValidIDs == device)
+					if (device == valueInValidIDs)
 					{
-						foreach (string valueInConnectedDevices in connectedDevices)
+						if (connectedDevices.Length != 0)
 						{
-							if (device == valueInConnectedDevices)
+							foreach (string valueInConnectedDevices in connectedDevices)
 							{
-								deviceInConnectedDevices = true;
+								string[] splitString = valueInConnectedDevices.Split(";");
+								if (splitString[0] == device)
+								{
+									deviceInConnectedDevices = true;
+								}
 							}
+						}
+						else
+						{
+							deviceInConnectedDevices = false;
 						}
 					}
 				}
@@ -68,20 +76,21 @@ namespace udpServer.Server
 
 			if (deviceInConnectedDevices)
 			{
-				this.oldDevice(_ip, connectedDevices);
+				this.oldDevice(_ip, device, connectedDevices, _server);
 			}
 			else
 			{
-				this.newDevice();
+				this.newDevice(_ip, device, connectedDevices, _server);
 			}
 		}
 
-		private void newDevice()
+		private void newDevice(string _ip, string _device, string[] _connectedDevices, udpServer.Server.Server _server)
 		{
 			Console.WriteLine("New");
+			_server.addConnectedDevices($"{_device};{_ip}");
 		}
 
-		private void oldDevice(string _ip, string[] _connectedDevices)
+		private void oldDevice(string _ip, string _device, string[] _connectedDevices, udpServer.Server.Server _server)
 		{
 			Console.WriteLine("Old");
 
@@ -89,7 +98,7 @@ namespace udpServer.Server
 			{
 				if (i != _ip)
 				{
-
+					_server.addConnectedDevices($"{_device};{_ip}");
 				}
 			}
 		}

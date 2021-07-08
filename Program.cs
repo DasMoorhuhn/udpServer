@@ -17,6 +17,11 @@ namespace udpServer
 			{
 				string recv = server.StartListen();
 				logic.getCommand(recv, server);
+				string[] value = server.getConnectedDevices();
+				foreach (string i in value)
+				{
+					Console.WriteLine(i);
+				}
 			}
 		}
 	}

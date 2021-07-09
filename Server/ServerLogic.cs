@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
@@ -43,7 +44,7 @@ namespace udpServer.Server
 		private void getAlive(string _ip, int _port, string[] _command, udpServer.Server.Server _server)
 		{
 			string[] validIDs = _server.getValidIDs();
-			string[] connectedDevices = _server.getConnectedDevices();
+			ArrayList connectedDevices = _server.getConnectedDevices();
 			string cmd = _command[0];
 			string device = _command[1];
 			string alive = _command[2];
@@ -53,14 +54,22 @@ namespace udpServer.Server
 			{
 				foreach (string valueInValidIDs in validIDs)
 				{
-					if (valueInValidIDs == device)
+					if (device == valueInValidIDs)
 					{
-						foreach (string valueInConnectedDevices in connectedDevices)
+						if (connectedDevices.Count != 0)
 						{
-							if (device == valueInConnectedDevices)
+							foreach (string valueInConnectedDevices in connectedDevices)
 							{
-								deviceInConnectedDevices = true;
+								string[] splitString = valueInConnectedDevices.Split(";");
+								if (splitString[0] == device)
+								{
+									deviceInConnectedDevices = true;
+								}
 							}
+						}
+						else
+						{
+							deviceInConnectedDevices = false;
 						}
 					}
 				}
@@ -68,35 +77,36 @@ namespace udpServer.Server
 
 			if (deviceInConnectedDevices)
 			{
-				this.oldDevice(_ip, connectedDevices);
+				this.oldDevice(_ip, device, connectedDevices, _server);
 			}
 			else
 			{
-				this.newDevice();
+				this.newDevice(_ip, device, connectedDevices, _server);
 			}
 		}
 
-		private void newDevice()
+		private void newDevice(string _ip, string _device, ArrayList _connectedDevices, udpServer.Server.Server _server)
 		{
 			Console.WriteLine("New");
+			_server.addConnectedDevices($"{_device};{_ip}");
 		}
 
-		private void oldDevice(string _ip, string[] _connectedDevices)
+		private void oldDevice(string _ip, string _device, ArrayList _connectedDevices, udpServer.Server.Server _server)
 		{
 			Console.WriteLine("Old");
 
 			foreach (string i in _connectedDevices)
 			{
-				if (i != _ip)
+				string[] ip = i.Split(";");
+				if (ip[1] != _ip)
 				{
-
+					_server.addConnectedDevices($"{_device};{_ip}");
 				}
 			}
 		}
 
 		private void getCommand(string[] command)
 		{
-
 		}
 	}
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Net;
+using System.Collections;
 
 namespace udpServer.Server
 {
@@ -15,7 +16,7 @@ namespace udpServer.Server
 		private UdpClient listen;
 		private IPEndPoint epIn;
 		private string[] validIDs = { "TEST", "A001" };
-		private string[] connectedDevices = {  };
+		private ArrayList connectedDevices = new ArrayList();
 
 		public Server(int _serverPort)
 		{
@@ -38,14 +39,14 @@ namespace udpServer.Server
 			return this.validIDs;
 		}
 
-		public string[] getConnectedDevices()
+		public ArrayList getConnectedDevices()
 		{
 			return this.connectedDevices;
 		}
 
 		public void addConnectedDevices(string newID)
 		{
-			this.connectedDevices.Append(newID);
+			connectedDevices.Add(newID);
 		}
 
 		public void delConnectedDevices(string id)

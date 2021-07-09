@@ -9,9 +9,11 @@ namespace udpServer
 	{
 		static void Main(string[] args)
 		{
+			Console.Title = "UDP Server";
 			Server.Server server = new Server.Server(12000);
 			ServerLogic logic = new Server.ServerLogic();
-			Console.Title = "UDP Server";
+			Server.xml.XmlParser xmlParser = new Server.xml.XmlParser();
+			xmlParser.createXmlDoc();
 			
 													 
 			while (true)

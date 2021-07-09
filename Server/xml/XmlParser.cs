@@ -5,16 +5,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace udpServer.Server.xml
 {
 	class XmlParser
 	{
 		XmlDocument doc;
+    private string xmlPath;
 		public XmlParser()
 		{
       this.doc = new XmlDocument();
-		}
+      xmlPath = "C:\\Users\\Hendrik\\source\\repos\\udpServer\\Server\\xml\\document.xml";
+
+    }
 
 
     private XmlElement createXmlElementWithTextLabel(string _nameOfElement, string _valueOfElement, XmlElement _master)
@@ -47,23 +51,63 @@ namespace udpServer.Server.xml
       return _master;
     }
 
-
-    public void createXmlDoc()
-    {
-      XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
-      XmlElement root = doc.DocumentElement;
-      doc.InsertBefore(xmlDeclaration, root);
-
+    private XmlElement createStucture(string _rootName, string _middleName, string[] _value)
+		{
+      List<XmlElement> bodyList = new List<XmlElement> { };
       List<XmlElement> elementList = new List<XmlElement> { };
+      bodyList.Add(this.createXmlElement(_rootName));
+      bodyList.Add(this.createXmlElement(_middleName));
 
-      elementList.Add(this.createXmlElement("body"));
-      elementList.Add(this.createXmlElement("person"));
-      elementList.Add(this.createXmlElementWithTextLabel("Name", "Peter"));
-      elementList[1].AppendChild(elementList[2]);
-      elementList[0].AppendChild(elementList[1]);
-      doc.AppendChild(elementList[0]);
+      foreach (string i in _value)
+			{
+        elementList.Add(this.createXmlElementWithTextLabel($"ID", i));
+      }
 
-      doc.Save("C:\\Users\\Hendrik\\source\\repos\\udpServer\\Server\\xml\\document.xml");
+      for (int i = 0; i <= (_value.Length -1); i++)
+			{
+        bodyList[1].AppendChild(elementList[i]);
+			}
+
+      bodyList[0].AppendChild(bodyList[1]);
+      return bodyList[0];
+    }
+
+    private int countElements()
+    {
+      XDocument _doc = XDocument.Load(xmlPath);
+      var count = _doc.Descendants("body").Descendants("devices").Descendants("ID").Count();
+      return count;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public void createXmlDoc(string[] _value)
+    {
+      doc.AppendChild(this.createStucture("body", "devices", _value));
+
+      doc.Save(xmlPath);
+    }
+
+    public string[] getElements()
+		{
+      XDocument doc = XDocument.Load(xmlPath);
+      List<string> list = doc.Descendants("body").Descendants("devices").Descendants("ID").Select(node => node.Value).ToList();
+      string[] newList = { };
+      foreach (string i in list)
+      {
+        newList.Append(i);
+			}
+      return newList;
     }
 	}
 }

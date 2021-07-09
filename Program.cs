@@ -2,6 +2,7 @@
 using udpServer.Server;
 using System.Net.Sockets;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace udpServer
 {
@@ -12,10 +13,7 @@ namespace udpServer
 			Console.Title = "UDP Server";
 			Server.Server server = new Server.Server(12000);
 			ServerLogic logic = new Server.ServerLogic();
-			Server.xml.XmlParser xmlParser = new Server.xml.XmlParser();
-			xmlParser.createXmlDoc();
-			
-													 
+						 
 			while (true)
 			{
 				string recv = server.StartListen();

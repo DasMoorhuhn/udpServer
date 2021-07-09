@@ -1,0 +1,6 @@
+<body>
+  <devices>
+    <ID>TEST;192.168.178.23</ID>
+    <ID>A001;192.168.178.55</ID>
+  </devices>
+</body>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
@@ -43,7 +44,7 @@ namespace udpServer.Server
 		private void getAlive(string _ip, int _port, string[] _command, udpServer.Server.Server _server)
 		{
 			string[] validIDs = _server.getValidIDs();
-			string[] connectedDevices = _server.getConnectedDevices();
+			ArrayList connectedDevices = _server.getConnectedDevices();
 			string cmd = _command[0];
 			string device = _command[1];
 			string alive = _command[2];
@@ -55,7 +56,7 @@ namespace udpServer.Server
 				{
 					if (device == valueInValidIDs)
 					{
-						if (connectedDevices.Length != 0)
+						if (connectedDevices.Count != 0)
 						{
 							foreach (string valueInConnectedDevices in connectedDevices)
 							{
@@ -84,19 +85,20 @@ namespace udpServer.Server
 			}
 		}
 
-		private void newDevice(string _ip, string _device, string[] _connectedDevices, udpServer.Server.Server _server)
+		private void newDevice(string _ip, string _device, ArrayList _connectedDevices, udpServer.Server.Server _server)
 		{
 			Console.WriteLine("New");
 			_server.addConnectedDevices($"{_device};{_ip}");
 		}
 
-		private void oldDevice(string _ip, string _device, string[] _connectedDevices, udpServer.Server.Server _server)
+		private void oldDevice(string _ip, string _device, ArrayList _connectedDevices, udpServer.Server.Server _server)
 		{
 			Console.WriteLine("Old");
 
 			foreach (string i in _connectedDevices)
 			{
-				if (i != _ip)
+				string[] ip = i.Split(";");
+				if (ip[1] != _ip)
 				{
 					_server.addConnectedDevices($"{_device};{_ip}");
 				}

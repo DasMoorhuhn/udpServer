@@ -107,7 +107,6 @@ namespace udpServer.Server
 
 		private void getCommand(string[] command)
 		{
-
 		}
 	}
 }
